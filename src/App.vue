@@ -6,7 +6,7 @@
     <input type=text v-model="input" @keyup.enter="go">
     <button @click="go">Go!</button>
     <div>
-      <p class="alert" v-if="errMsg || alert">{{errMsg || alert}}</p>
+      <p class="alert" v-if="alert">{{alert}}</p>
     </div>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
       if (this.notFound) {
         return `${this.input} is not found in npm registry`
       }
-      return
+      return this.errMsg
     }
   },
   watch: {
@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     go: function () {
-      if (this.notFound) {
+      if (this.alert) {
         return
       }
       this.$emit('path', `/${this.input}`)

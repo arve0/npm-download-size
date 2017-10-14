@@ -106,7 +106,8 @@ export default {
       let uri = `https://api.seljebu.no/download-size/${this.pkgName}`
       fetch(uri).then(res => {
         if (res.status !== 200) {
-          return res.text()  // TODO: redirect, show warning
+          window.history.back()  // TODO: show warning
+          return
         }
         return res.json()
       }).then(res => {
