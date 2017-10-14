@@ -6,20 +6,22 @@
     <input type=text v-model="input" @keyup.enter="go">
     <button @click="go">Go!</button>
     <div>
-      <p class="alert" v-if="alert !== ''">{{alert}}</p>
+      <p class="alert" v-if="errMsg || alert">{{errMsg || alert}}</p>
     </div>
   </div>
 </template>
 
 <script>
 import debounce from 'debounce'
+import valid from 'validate-npm-package-name'
 
 export default {
   name: 'app',
   data () {
     return {
       input: '',
-      notFound: false
+      notFound: false,
+      errMsg: false
     }
   },
   computed: {
@@ -27,13 +29,20 @@ export default {
       if (this.notFound) {
         return `${this.input} is not found in npm registry`
       }
-      return ''
+      return
     }
   },
   watch: {
     input: function (value) {
       this.notFound = false
+      this.errMsg = false
       if (value === '') {
+        return
+      }
+      let v = valid(value)
+      if (!v.validForNewPackages && !v.validForOldPackages) {
+        this.errMsg = v.errors.join(', ')
+        console.log(this.errMsg)
         return
       }
       this.checkIfFound(value)

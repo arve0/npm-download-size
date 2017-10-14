@@ -12,6 +12,7 @@
     "babel-polyfill": "^6.26.0",
     "debounce": "^1.0.2",
     "si-prefix": "^0.1.0",
+    "validate-npm-package-name": "^3.0.0",
     "vue": "^2.4.4",
     "vue-async-computed": "^3.3.1"
   },
