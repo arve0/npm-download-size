@@ -3,6 +3,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import View from './View.vue'
 
+let pathPrefix = ''
+if (process.env.NODE_ENV === 'production') {
+  pathPrefix = '/npm-download-size'
+}
+
 const app = new Vue({
   el: '#app',
   data: function () {
@@ -12,13 +17,13 @@ const app = new Vue({
   },
   methods: {
     changePath: function (path) {
-      this.path = path
-      window.history.pushState(null, null, path)
-    },
+      this.path = pathPrefix + path
+      window.history.pushState(null, null, this.path)
+    }
   },
   render: function (h) {
     switch (this.path) {
-      case '/':
+      case pathPrefix + '/':
         return h(App, {
           on: {
             path: this.changePath
@@ -27,7 +32,7 @@ const app = new Vue({
       default:
         return h(View, {
           props: {
-            pkgName: this.path.slice(1)
+            pkgName: this.path.replace(pathPrefix, '').slice(1)
           },
           on: {
             path: this.changePath
