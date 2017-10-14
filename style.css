@@ -1,0 +1,18 @@
+html {
+  padding: 0;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #102030;
+}
+body {
+  margin: 0;
+}
+#app {
+  text-align: center;
+  margin-top: 6em;
+}
+h1, h2 {
+  font-weight: normal;
+}
+
