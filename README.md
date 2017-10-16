@@ -4,6 +4,8 @@
 
 See it live here: https://arve0.github.io/npm-download-size
 
+Also availabel as cli: https://github.com/arve0/npm-download-size-cli
+
 ## Build Setup
 
 ``` bash
