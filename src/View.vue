@@ -1,14 +1,21 @@
 <template>
-  <div id=view  v-if="pkg">
-    <dep-component :pkg=pkg :parent=pkg />
-    <h1>Dependencies</h1>
-    <dep-component
-      v-for="dep in deps"
-      :key="dep.name"
-      :pkg=dep
-      :parent=pkg
-      @goto="goTo"
-    />
+  <div id=view>
+    <div v-if="!pkg" class=loading>
+      {{spinner}} Loading, please wait.
+    </div>
+    <div v-if="pkg">
+      <dep-component :pkg=pkg :parent=pkg />
+      <div v-if="pkg.dependencies.length">
+        <h1>Dependencies</h1>
+        <dep-component
+          v-for="dep in deps"
+          :key="dep.name"
+          :pkg=dep
+          :parent=pkg
+          @goto="goTo"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -22,7 +29,9 @@ export default {
   },
   data: function () {
     return {
-      pkg: null
+      pkg: null,
+      spinner: '⠋',
+      spinners: ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
     }
   },
   computed: {
@@ -32,6 +41,8 @@ export default {
   },
   methods: {
     getPkg: function () {
+      this.spin()
+      this._interval = setInterval(this.spin, 100)
       let uri = `https://api.seljebu.no/download-size/${this.pkgName}`
       fetch(uri).then(res => {
         if (res.status !== 200) {
@@ -40,6 +51,7 @@ export default {
         }
         return res.json()
       }).then(res => {
+        clearInterval(this._interval)
         this.pkg = res
       })
     },
@@ -47,6 +59,10 @@ export default {
       this.pkg = null
       this.$emit('path', `/${pkgName}`)
     },
+    spin: function () {
+      this.spinner = this.spinners.shift()
+      this.spinners.push(this.spinner)
+    }
   },
   created: function () {
     this.getPkg()
@@ -63,6 +79,11 @@ export default {
 <style scoped>
 #view {
   padding: 1em;
+}
+.loading {
+  text-align: center;
+  margin-top: 20%;
+  font-size: 200%;
 }
 h1 {
   margin-bottom:0;

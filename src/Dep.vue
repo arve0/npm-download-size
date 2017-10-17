@@ -67,14 +67,15 @@ export default {
 
 <style scoped>
 .dep {
+  display: inline-block;
   border-bottom: 2px solid;
   padding-top: 1em;
   padding-bottom: 1em;
+  margin-right: 2em;
 }
 .chart {
-  width: 30%;
-  max-width: 200px;
-  padding: 2em;
+  width: 150px;
+  padding: 1em;
   display: inline-block;
 }
 .details {

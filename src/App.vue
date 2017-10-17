@@ -67,7 +67,8 @@ export default {
 
 <style scoped>
 input {
-  margin-top: 2em;
+  margin-top: 5%;
+  max-width: 90%;
 }
 button {
   margin-top: 0.5em;

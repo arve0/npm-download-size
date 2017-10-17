@@ -5,7 +5,7 @@
   "author": "Arve Seljebu",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot --host 0.0.0.0",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
@@ -14,7 +14,7 @@
     "si-prefix": "^0.1.0",
     "validate-npm-package-name": "^3.0.0",
     "vue": "^2.4.4",
-    "vue-pie-chart": "^1.0.1"
+    "vue-pie-chart": "^1.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
