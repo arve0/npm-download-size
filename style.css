@@ -4,6 +4,12 @@ html {
   -moz-osx-font-smoothing: grayscale;
   color: #102030;
 }
+body {
+  margin: 0;
+}
+#app, .dep {
+  margin: 1em;
+}
 #app {
   text-align: center;
   margin-top: 10vh;

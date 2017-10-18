@@ -71,7 +71,6 @@ export default {
   border-bottom: 2px solid;
   padding-top: 1em;
   padding-bottom: 1em;
-  margin-right: 2em;
 }
 .chart {
   width: 150px;

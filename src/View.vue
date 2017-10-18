@@ -77,15 +77,13 @@ export default {
 </script>
 
 <style scoped>
-#view {
-  padding: 1em;
-}
 .loading {
   text-align: center;
   margin-top: 20%;
   font-size: 200%;
 }
 h1 {
+  margin: 0.5em;
   margin-bottom:0;
 }
 </style>
