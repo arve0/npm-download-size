@@ -7,7 +7,7 @@
       />
     </div>
     <div class="details">
-      <h1 class=link @click="$emit('goto', pkg.name)">{{pkg.name}}</h1>
+      <h1 class=link :title=title @click=click>{{pkg.name}}</h1>
       <table>
         <tr>
           <th>Version</th>
@@ -21,13 +21,13 @@
           <th>Total size</th>
           <td>{{pretty(pkg.size)}}</td>
         </tr>
+        <tr>
+          <th>Dependencies</th>
+          <td>{{pkg.totalDependencies}}</td>
+        </tr>
         <tr v-if="pkg === parent">
           <th>Direct dependencies</th>
           <td>{{pkg.dependencies.length}}</td>
-        </tr>
-        <tr>
-          <th>Total dependencies</th>
-          <td>{{pkg.totalDependencies}}</td>
         </tr>
       </table>
     </div>
@@ -44,16 +44,27 @@ export default {
     'pie-chart': PieChart
   },
   computed: {
+    isParent: function () {
+      return this.pkg === this.parent
+    },
+    title: function () {
+      return this.isParent ? 'view on npmjs' : 'analyse size of pkg'
+    },
     size: function () {
-      return this.pkg !== this.parent
-        ? this.pkg.size
-        : this.pkg.tarballSize
+      return this.isParent ? this.pkg.tarballSize : this.pkg.size
     },
     ratio: function () {
       return this.size / this.parent.size
     }
   },
   methods: {
+    click: function () {
+      if (this.isParent) {
+        window.location.href = `https://npmjs.com/package/${this.pkg.name}`
+      } else {
+        this.$emit('goto', this.pkg.name)
+      }
+    },
     pretty: function (size) {
       let converted = size === 0
         ? [0, 'B']  // avoid NaN, https://github.com/mal/si-prefix/issues/1
@@ -80,6 +91,10 @@ export default {
 .details {
   display: inline-block;
   vertical-align: top;
+}
+.details h1 {
+  margin-top: 0;
+  margin-bottom: 0.3em;
 }
 table {
   border-collapse: collapse;
