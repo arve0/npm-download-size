@@ -53,7 +53,7 @@ export default {
       if (this.alert) {
         return
       }
-      this.$emit('path', `/${this.input}`)
+      this.$emit('path', `${this.input}`)
     },
     checkIfFound: debounce(async function (value) {
       let uri = `https://cors.seljebu.no/https://registry.npmjs.org/${value}/latest`

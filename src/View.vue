@@ -57,7 +57,7 @@ export default {
     },
     goTo: function (pkgName) {
       this.pkg = null
-      this.$emit('path', `/${pkgName}`)
+      this.$emit('path', `${pkgName}`)
     },
     spin: function () {
       this.spinner = this.spinners.shift()

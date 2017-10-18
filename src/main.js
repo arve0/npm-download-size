@@ -3,27 +3,21 @@ import Vue from 'vue'
 import App from './App.vue'
 import View from './View.vue'
 
-let pathPrefix = ''
-if (process.env.NODE_ENV === 'production') {
-  pathPrefix = '/npm-download-size'
-}
-
 const app = new Vue({
   el: '#app',
   data: function () {
     return {
-      path: window.location.pathname
+      path: window.location.hash.slice(1)
     }
   },
   methods: {
     changePath: function (path) {
-      this.path = pathPrefix + path
-      window.history.pushState(null, null, this.path)
+      window.location.hash = path
     }
   },
   render: function (h) {
     switch (this.path) {
-      case pathPrefix + '/':
+      case '':
         return h(App, {
           on: {
             path: this.changePath
@@ -32,7 +26,7 @@ const app = new Vue({
       default:
         return h(View, {
           props: {
-            pkgName: this.path.replace(pathPrefix, '').slice(1)
+            pkgName: this.path
           },
           on: {
             path: this.changePath
@@ -43,6 +37,6 @@ const app = new Vue({
 })
 
 // called when doing history back/forward
-window.addEventListener('popstate', (event) => {
-  app.path = window.location.pathname
+window.addEventListener('hashchange', (event) => {
+  app.path = window.location.hash.slice(1)
 })
