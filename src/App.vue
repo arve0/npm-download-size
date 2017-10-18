@@ -3,7 +3,7 @@
     <h1>npm download size</h1>
     <p class="lead">Analyse download size and dependencies of npm packages.</p>
     <p>Enter a package name below and press enter!</p>
-    <input type=text v-model="input" @keyup.enter="go">
+    <input type=text v-model="input" @keyup.enter="go" autofocus>
     <button @click="go">Go!</button>
     <div>
       <p class="alert" v-if="alert">{{alert}}</p>
