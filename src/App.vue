@@ -8,6 +8,21 @@
     <div>
       <p class="alert" v-if="alert">{{alert}}</p>
     </div>
+    <div id=popular>
+      <h2>Popular libraries</h2>
+      <a href="#lodash">lodash</a>,
+      <a href="#request">request</a>,
+      <a href="#async">async</a>,
+      <a href="#chalk">chalk</a>,
+      <a href="#express">express</a>,
+      <a href="#bluebird">bluebird</a>,
+      <a href="#commander">commander</a>,
+      <a href="#debug">debug</a>,
+      <a href="#react">react</a>,
+      <a href="#moment">moment</a>,
+      <a href="#underscore">underscore</a>,
+      <a href="#mkdirp">mkdirp</a>
+    </div>
   </div>
 </template>
 
@@ -92,5 +107,8 @@ input:focus, button:focus {
   padding: 0.5em;
   font-size: 1.5em;
   border-radius: 0.1em;
+}
+#popular h2 {
+  margin-top: 3em;
 }
 </style>
