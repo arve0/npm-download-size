@@ -71,7 +71,7 @@ export default {
       this.$emit('path', `${this.input}`)
     },
     checkIfFound: debounce(async function (value) {
-      let uri = `https://cors.seljebu.no/https://registry.npmjs.org/${value}/latest`
+      let uri = `https://cors.seljebu.no/https://registry.npmjs.org/${value.replace('/', '%2F')}/latest`
       let pkg = await fetch(uri)
       this.notFound = pkg.status !== 200
     }, 300)
