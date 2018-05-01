@@ -12,6 +12,7 @@
       :input-attrs="{ autofocus: 'true' }"
       @update-items="updateItems"
       @item-selected="go"
+      @enter="go"
     />
     <div>
       <p class="alert" v-if="alert">{{alert}}</p>
@@ -79,8 +80,10 @@ export default {
       if (this.alert) {
         return
       }
-      if (item) {
+      if (typeof item === "object") {
         this.input = item.name
+      } else if (typeof item === "string") {
+        this.input = item
       }
       this.$emit('path', this.uriEncodePkgName(this.input))
     },
