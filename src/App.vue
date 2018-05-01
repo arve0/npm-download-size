@@ -60,7 +60,7 @@ export default {
         console.log(this.errMsg)
         return
       }
-      this.checkIfFound(value)
+      this.checkIfFound(this.uriEncodePkgName(value))
     }
   },
   methods: {
@@ -68,13 +68,14 @@ export default {
       if (this.alert) {
         return
       }
-      this.$emit('path', `${this.input}`)
+      this.$emit('path', this.uriEncodePkgName(this.input))
     },
     checkIfFound: debounce(async function (value) {
-      let uri = `https://cors.seljebu.no/https://registry.npmjs.org/${value.replace('/', '%2F')}/latest`
+      let uri = `https://cors.seljebu.no/https://registry.npmjs.org/${value}/*`
       let pkg = await fetch(uri)
       this.notFound = pkg.status !== 200
-    }, 300)
+    }, 300),
+    uriEncodePkgName: (pkgname) => pkgname.replace('/', '%2f')
   }
 }
 
