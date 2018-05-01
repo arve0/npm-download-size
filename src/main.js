@@ -2,6 +2,9 @@ import 'babel-polyfill'
 import Vue from 'vue'
 import App from './App.vue'
 import View from './View.vue'
+import Autocomplete from 'v-autocomplete'
+
+Vue.use(Autocomplete)
 
 const app = new Vue({
   el: '#app',

@@ -3,8 +3,16 @@
     <h1>npm download size</h1>
     <p class="lead">Analyse download size and dependencies of npm packages.</p>
     <p>Enter a package name below and press enter!</p>
-    <input type=text v-model="input" @keyup.enter="go" autofocus>
-    <button @click="go">Go!</button>
+    <v-autocomplete
+      :wait="300"
+      :keep-open="true"
+      :items="suggestions"
+      :get-label="getLabel"
+      :component-item='template'
+      :input-attrs="{ autofocus: 'true' }"
+      @update-items="updateItems"
+      @item-selected="go"
+    />
     <div>
       <p class="alert" v-if="alert">{{alert}}</p>
     </div>
@@ -27,8 +35,7 @@
 </template>
 
 <script>
-import debounce from 'debounce'
-import valid from 'validate-npm-package-name'
+import Suggestion from './Suggestion.vue'
 
 export default {
   name: 'app',
@@ -36,7 +43,9 @@ export default {
     return {
       input: '',
       notFound: false,
-      errMsg: false
+      errMsg: false,
+      suggestions: [],
+      template: Suggestion
     }
   },
   computed: {
@@ -47,41 +56,50 @@ export default {
       return this.errMsg
     }
   },
-  watch: {
-    input: function (value) {
+  methods: {
+    updateItems: function (value) {
+      this.input = value
       this.notFound = false
       this.errMsg = false
       if (value === '') {
         return
       }
-      let v = valid(value)
-      if (!v.validForNewPackages && !v.validForOldPackages) {
-        this.errMsg = v.errors.join(', ')
-        console.log(this.errMsg)
-        return
-      }
-      this.checkIfFound(this.uriEncodePkgName(value))
-    }
-  },
-  methods: {
-    go: function () {
+      this.getSuggestions(value).then(() => {
+        this.notFound = this.suggestions.length === 0
+        if (this.suggestions.length === 1) {
+          this.go()
+        }
+      })
+    },
+    getLabel: function (item) {
+      return (item && item.name) || ""
+    },
+    go: function (item) {
       if (this.alert) {
         return
       }
+      if (item) {
+        this.input = item.name
+      }
       this.$emit('path', this.uriEncodePkgName(this.input))
     },
-    checkIfFound: debounce(async function (value) {
-      let uri = `https://cors.seljebu.no/https://registry.npmjs.org/${value}/*`
-      let pkg = await fetch(uri)
-      this.notFound = pkg.status !== 200
-    }, 300),
+    getSuggestions: async function (value) {
+      let uri = this.cors(`https://www.npmjs.com/search/suggestions?q=${value}`)
+      await fetch(uri)
+        .then(r => r.json())
+        .then(r => this.suggestions = r || [])
+    },
+    cors: (url) => `https://cors.seljebu.no/` + url,
     uriEncodePkgName: (pkgname) => pkgname.replace('/', '%2f')
   }
 }
 
 </script>
 
-<style scoped>
+<style>
+div.v-autocomplete {
+  display: inline-block;
+}
 input {
   margin-top: 5%;
   max-width: 100%;
@@ -100,6 +118,16 @@ input, button {
 input:focus, button:focus {
   outline: none;
   box-shadow: 0 0 3pt 1pt lightgreen;
+}
+.v-autocomplete-list {
+  margin-top: 1em;
+}
+.v-autocomplete-list-item {
+  margin-right: 0.8em;
+}
+.v-autocomplete-item-active {
+  font-weight: bold;
+  cursor: pointer;
 }
 .alert {
   margin-top: 2em;
