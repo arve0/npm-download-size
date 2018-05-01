@@ -45,15 +45,20 @@ export default {
       this._interval = setInterval(this.spin, 100)
       let uri = `https://api.seljebu.no/download-size/${this.pkgName}`
       fetch(uri).then(res => {
-        if (res.status !== 200) {
-          window.history.back()  // TODO: show warning
+        if (res.status === 404) {
+          this.$emit('error', new Error(`Package "${this.pkgName}" not found.`))
+          return
+        } else if (res.status === 500) {
+          res.text().then(err => {
+            this.$emit('error', new Error(err))
+          })
           return
         }
         return res.json()
       }).then(res => {
         clearInterval(this._interval)
         this.pkg = res
-      })
+      }).catch(err => this.$emit('error', err))
     },
     goTo: function (pkgName) {
       this.pkg = null

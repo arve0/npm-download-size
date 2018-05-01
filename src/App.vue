@@ -39,11 +39,12 @@ import Suggestion from './Suggestion.vue'
 
 export default {
   name: 'app',
+  props: ['error'],
   data () {
     return {
       input: '',
       notFound: false,
-      errMsg: false,
+      errMsg: this.error,
       suggestions: [],
       template: Suggestion
     }
@@ -88,6 +89,7 @@ export default {
       await fetch(uri)
         .then(r => r.json())
         .then(r => this.suggestions = r || [])
+        .catch(err => this.$emit('error', err))
     },
     cors: (url) => `https://cors.seljebu.no/` + url,
     uriEncodePkgName: (pkgname) => pkgname.replace('/', '%2f')
