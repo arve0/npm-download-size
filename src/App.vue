@@ -74,27 +74,27 @@ export default {
       })
     },
     getLabel: function (item) {
-      return (item && item.name) || ""
+      return (item && item.package && item.package.name) || ""
     },
     go: function (item) {
       if (this.alert) {
         return
       }
       if (typeof item === "object") {
-        this.input = item.name
+        this.input = item.package.name
       } else if (typeof item === "string") {
         this.input = item
       }
       this.$emit('path', this.uriEncodePkgName(this.input))
     },
     getSuggestions: async function (value) {
-      let uri = this.cors(`https://www.npmjs.com/search/suggestions?q=${value}`)
+      let uri = `https://registry.npmjs.com/-/v1/search?size=5&text=${value}`
       await fetch(uri)
         .then(r => r.json())
+        .then(r => r.objects)
         .then(r => this.suggestions = r || [])
         .catch(err => this.$emit('error', err))
     },
-    cors: (url) => `https://cors.seljebu.no/` + url,
     uriEncodePkgName: (pkgname) => pkgname.replace('/', '%2f')
   }
 }

@@ -1,5 +1,5 @@
 <template>
-    <span>{{ item.name }}</span>
+    <span>{{ item.package.name }}</span>
 </template>
 
 <script>
