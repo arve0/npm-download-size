@@ -62,12 +62,13 @@ export default {
     },
     goTo: function (pkgName) {
       this.pkg = null
-      this.$emit('path', `${pkgName}`)
+      this.$emit('path', this.uriEncodePkgName(pkgName))
     },
     spin: function () {
       this.spinner = this.spinners.shift()
       this.spinners.push(this.spinner)
-    }
+    },
+    uriEncodePkgName: (pkgname) => pkgname.replace('/', '%2f')
   },
   created: function () {
     this.getPkg()
