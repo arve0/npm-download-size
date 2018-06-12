@@ -44,6 +44,9 @@ export default {
   data () {
     return {
       input: '',
+      spec: [],
+      version: '',
+      prevName: '',
       notFound: false,
       errMsg: this.error,
       suggestions: [],
@@ -61,17 +64,23 @@ export default {
   methods: {
     updateItems: function (value) {
       this.input = value
+      this.spec = value.split('@')
+      this.version = this.spec[1] || ''
+      if (this.spec[0] === this.prevName) {
+        return
+      }
       this.notFound = false
       this.errMsg = false
       if (value === '') {
         return
       }
-      this.getSuggestions(value).then(() => {
+      this.getSuggestions(this.spec[0]).then(() => {
         this.notFound = this.suggestions.length === 0
         if (this.suggestions.length === 1) {
           this.go()
         }
       })
+      this.prevName = this.spec[0]
     },
     getLabel: function (item) {
       return (item && item.package && item.package.name) || ""
@@ -85,7 +94,7 @@ export default {
       } else if (typeof item === "string") {
         this.input = item
       }
-      this.$emit('path', this.uriEncodePkgName(this.input))
+      this.$emit('path', this.uriEncodePkgName(this.input + '@' + this.version))
     },
     getSuggestions: async function (value) {
       let uri = `https://registry.npmjs.com/-/v1/search?size=5&text=${value}`
