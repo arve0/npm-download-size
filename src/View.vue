@@ -46,7 +46,8 @@ export default {
       let uri = `https://api.seljebu.no/download-size/${this.pkgName}`
       fetch(uri).then(res => {
         if (res.status === 404) {
-          this.$emit('error', new Error(`Package "${this.pkgName}" not found.`))
+          let spec = this.pkgName.replace('%2f', '/')
+          this.$emit('error', new Error(`"${spec}" not found.`))
           return
         } else if (res.status === 500) {
           res.text().then(err => {

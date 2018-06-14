@@ -44,7 +44,7 @@ export default {
   data () {
     return {
       input: '',
-      spec: [],
+      name: '',
       version: '',
       prevName: '',
       notFound: false,
@@ -64,9 +64,8 @@ export default {
   methods: {
     updateItems: function (value) {
       this.input = value
-      this.spec = value.split('@')
-      this.version = this.spec[1] || ''
-      if (this.spec[0] === this.prevName) {
+      this.parseSpec(value)
+      if (this.name === this.prevName) {
         return
       }
       this.notFound = false
@@ -74,13 +73,29 @@ export default {
       if (value === '') {
         return
       }
-      this.getSuggestions(this.spec[0]).then(() => {
+      this.getSuggestions(this.name).then(() => {
         this.notFound = this.suggestions.length === 0
         if (this.suggestions.length === 1) {
           this.go()
         }
       })
-      this.prevName = this.spec[0]
+      this.prevName = this.name
+    },
+    parseSpec: function (spec) {
+      let name, version
+      let firstAt = spec.indexOf('@')
+      let lastAt = spec.lastIndexOf('@')
+
+      if (firstAt !== lastAt || lastAt !== 0) {
+        name = spec.substring(0, lastAt)
+        version = spec.substring(lastAt + 1)
+      } else {
+        name = spec
+        version = ''
+      }
+
+      this.name = name
+      this.version = version
     },
     getLabel: function (item) {
       return (item && item.package && item.package.name) || ""
