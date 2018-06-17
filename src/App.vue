@@ -44,8 +44,6 @@ export default {
   data () {
     return {
       input: '',
-      name: '',
-      version: '',
       prevName: '',
       notFound: false,
       errMsg: this.error,
@@ -59,12 +57,30 @@ export default {
         return `${this.input} is not found in npm registry`
       }
       return this.errMsg
-    }
+    },
+    name: function () {
+      let firstAt = this.input.indexOf('@')
+      let lastAt = this.input.lastIndexOf('@')
+
+      if (firstAt !== lastAt || lastAt > 0) {
+        return this.input.substring(0, lastAt)
+      } else {
+        return this.input
+      }
+    },
+    version: function () {
+      let lastAt = this.input.lastIndexOf('@')
+
+      if (lastAt > 0) {
+        return this.input.substring(lastAt)
+      } else {
+        return ''
+      }
+    },
   },
   methods: {
     updateItems: function (value) {
       this.input = value
-      this.parseSpec(value)
       if (this.name === this.prevName) {
         return
       }
@@ -81,35 +97,18 @@ export default {
       })
       this.prevName = this.name
     },
-    parseSpec: function (spec) {
-      let name, version
-      let firstAt = spec.indexOf('@')
-      let lastAt = spec.lastIndexOf('@')
-
-      if (firstAt !== lastAt || lastAt !== 0) {
-        name = spec.substring(0, lastAt)
-        version = spec.substring(lastAt + 1)
-      } else {
-        name = spec
-        version = ''
-      }
-
-      this.name = name
-      this.version = version
-    },
     getLabel: function (item) {
-      return (item && item.package && item.package.name) || ""
+      return (item && item.package && item.package.name + this.version) || ""
     },
     go: function (item) {
       if (this.alert) {
         return
       }
       if (typeof item === "object") {
-        this.input = item.package.name
-      } else if (typeof item === "string") {
-        this.input = item
+        this.$emit('path', this.getPath(item.package.name))
+      } else {
+        this.$emit('path', this.getPath(this.name))
       }
-      this.$emit('path', this.uriEncodePkgName(this.input + '@' + this.version))
     },
     getSuggestions: async function (value) {
       let uri = `https://registry.npmjs.com/-/v1/search?size=5&text=${value}`
@@ -118,6 +117,9 @@ export default {
         .then(r => r.objects)
         .then(r => this.suggestions = r || [])
         .catch(err => this.$emit('error', err))
+    },
+    getPath: function (name) {
+      return this.uriEncodePkgName(name + this.version)
     },
     uriEncodePkgName: (pkgname) => pkgname.replace('/', '%2f')
   }
