@@ -17,15 +17,13 @@ Start with entering the name of a package:
 
 ![enter name of package](start.png)
 
-Statistics of package is shown in top. Percentage is package size relative to complete size (all depedencies). Click on the package name to go to npmjs.
+Press enter, and you will get the statistics.
 
-![package stats](package.png)
+![download size of webpack](webpack.png)
 
-Below are direct dependencies. Click on their names to analyze them.
+Click on dependencies to show their statistics. If you click on the package name, you will be forwarded to npmjs.
 
-![dependencies stats](deps.png)
-
-## Build Setup
+## Development
 
 ``` bash
 # install dependencies
