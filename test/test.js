@@ -32,11 +32,11 @@ launch({ devtools: true }).then(async (browser) => {
         await sleep(300)
         await input.press('Enter')
 
-        await page.waitFor('h1.link')
+        await page.waitFor('.package h1')
 
-        let npmLink = await page.$eval('h1.link', link => link.textContent)
+        let npmLink = await page.$eval('.package h1', link => link.textContent)
 
-        t.equal(npmLink, 'async')
+        t.true(npmLink.includes('async'))
         t.end()
     })
 
@@ -47,11 +47,11 @@ launch({ devtools: true }).then(async (browser) => {
         await page.waitFor('.v-autocomplete-item-active')
         await input.press('Enter')
 
-        await page.waitFor('h1.link')
+        await page.waitFor('.package h1')
 
-        let npmLink = await page.$eval('h1.link', link => link.textContent)
+        let npmLink = await page.$eval('.package h1', link => link.textContent)
 
-        t.equal(npmLink, 'async')
+        t.true(npmLink.includes('async'))
         t.end()
     })
 
@@ -63,11 +63,11 @@ launch({ devtools: true }).then(async (browser) => {
         await input.press('ArrowDown')
         await input.press('Enter')
 
-        await page.waitFor('h1.link')
+        await page.waitFor('.package h1')
 
-        let npmLink = await page.$eval('h1.link', link => link.textContent)
+        let npmLink = await page.$eval('.package h1', link => link.textContent)
 
-        t.notEqual(npmLink, 'async')
+        t.false(npmLink.indexOf('async @') === 0)
         t.end()
     })
 

@@ -1,54 +1,25 @@
 <template>
   <div class=dep>
-    <div class="chart">
-      <pie-chart
-        :ratio=ratio
-        :label-small=pretty(size)
-      />
-    </div>
-    <div class="details">
-      <h1 class=link :title=title @click=click>{{pkg.name}}</h1>
-      <table>
-        <tr>
-          <th>Version</th>
-          <td>{{pkg.version}}</td>
-        </tr>
-        <tr>
-          <th>Tarball size</th>
-          <td>{{pretty(pkg.tarballSize)}}</td><!-- TODO: percent -->
-        </tr>
-        <tr>
-          <th>Total size</th>
-          <td>{{pretty(pkg.size)}}</td>
-        </tr>
-        <tr>
-          <th>Dependencies</th>
-          <td>{{pkg.totalDependencies}}</td>
-        </tr>
-        <tr v-if="pkg === parent">
-          <th>Direct dependencies</th>
-          <td>{{pkg.dependencies.length}}</td>
-        </tr>
-      </table>
-    </div>
+    <bar :ratio=ratio />
+    <a class=description :title=title @click=click>{{pkg.name}} @ {{pkg.version}} -- {{pretty(pkg.size)}} ({{pkg.totalDependencies}} deps)</a>
   </div>
 </template>
 
 <script>
 import prefix from 'si-prefix'
-import PieChart from 'vue-pie-chart'
+import Bar from './Bar.vue'
 
 export default {
   props: ['pkg', 'parent'],
   components: {
-    'pie-chart': PieChart
+    'bar': Bar,
   },
   computed: {
     isParent: function () {
       return this.pkg === this.parent
     },
     title: function () {
-      return this.isParent ? 'view on npmjs' : 'analyse size of pkg'
+      return this.isParent ? 'view on npmjs' : 'show pkg size'
     },
     size: function () {
       return this.isParent ? this.pkg.tarballSize : this.pkg.size
@@ -59,11 +30,7 @@ export default {
   },
   methods: {
     click: function () {
-      if (this.isParent) {
-        window.location.href = `https://npmjs.com/package/${this.pkg.name}`
-      } else {
-        this.$emit('goto', this.pkg.name)
-      }
+      this.$emit('goto', this.pkg.name)
     },
     pretty: function (size) {
       let converted = size === 0
@@ -78,48 +45,12 @@ export default {
 
 <style scoped>
 .dep {
-  display: inline-block;
-  border-bottom: 2px solid;
-  padding-top: 1em;
-  padding-bottom: 1em;
+  margin-left: 1em;
+  margin-bottom: 0.6em;
 }
-.chart {
-  width: 150px;
-  padding: 1em;
-  display: inline-block;
-}
-.details {
-  display: inline-block;
-  vertical-align: top;
-}
-.details h1 {
-  margin-top: 0;
-  margin-bottom: 0.3em;
-}
-table {
-  border-collapse: collapse;
-  margin-bottom: 1em;
-}
-th, td {
-  border-bottom-width: 2px;
-  border-bottom-style: solid;
-  border-bottom-color: black;
-}
-th {
-  text-align: left;
-  padding-right: 2em;
-}
-td {
-  text-align: right;
-}
-.link {
+.description {
+  transform: rotate(45deg);
   cursor: pointer;
+  white-space: pre;
 }
-.small {
-  font-size: 80%;
-}
-.tiny {
-  font-size: 60%;
-}
-
 </style>

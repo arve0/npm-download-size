@@ -4,16 +4,18 @@
       {{spinner}} Loading, please wait.
     </div>
     <div v-if="pkg">
-      <dep-component :pkg=pkg :parent=pkg />
+      <pkg :pkg=pkg />
       <div v-if="pkg.dependencies.length">
         <h1>Dependencies</h1>
-        <dep-component
-          v-for="dep in deps"
-          :key="dep.name"
-          :pkg=dep
-          :parent=pkg
-          @goto="goTo"
-        />
+        <div class="deps">
+          <dep
+            v-for="dep in deps"
+            :key="dep.name"
+            :pkg=dep
+            :parent=pkg
+            @goto="goTo"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -21,11 +23,13 @@
 
 <script>
 import Dep from './Dep.vue'
+import Pkg from './Pkg.vue'
 
 export default {
   props: ['pkgName'],
   components: {
-    'dep-component': Dep
+    'dep': Dep,
+    'pkg': Pkg,
   },
   data: function () {
     return {
@@ -92,5 +96,14 @@ export default {
 h1 {
   margin: 0.5em;
   margin-bottom:0;
+}
+.deps {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+.deps > * {
+  flex-grow: 1;
+  flex-basis: 0;
 }
 </style>
