@@ -111,10 +111,9 @@ export default {
       }
     },
     getSuggestions: async function (value) {
-      let uri = `https://registry.npmjs.com/-/v1/search?size=5&text=${value}`
+      let uri = `https://api.npms.io/v2/search/suggestions?q=${value}`
       await fetch(uri)
         .then(r => r.json())
-        .then(r => r.objects)
         .then(r => this.suggestions = r || [])
         .catch(err => this.$emit('error', err))
     },
