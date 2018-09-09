@@ -5,6 +5,7 @@
     <p>Enter a package name below and press enter!</p>
     <v-autocomplete
       :wait="300"
+      :min-len="2"
       :keep-open="true"
       :items="suggestions"
       :get-label="getLabel"
