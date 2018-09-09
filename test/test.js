@@ -71,6 +71,19 @@ launch({ devtools: true }).then(async (browser) => {
         t.end()
     })
 
+    it('should find packages with two letters', async t => {
+        await page.goto(mainPage)
+        let input = await page.$('input')
+        await input.type('he')
+
+        let firstSearchResult = '.v-autocomplete-list > :nth-child(1) > span'
+        await page.waitFor(firstSearchResult)
+        let npmLink = await page.$eval(firstSearchResult, span => span.textContent)
+
+        t.true(npmLink.includes('he'))
+        t.end()
+    })
+
     // wait for tests to end
     await onFinish()
 
