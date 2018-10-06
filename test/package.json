@@ -4,7 +4,7 @@
   "description": "plain browser testing with puppeteer and tape",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js | tap-dot"
+    "test": "mocha test.js"
   },
   "repository": {
     "type": "git",
@@ -18,8 +18,7 @@
   "homepage": "https://github.com/arve0/simple-browser-testing#readme",
   "devDependencies": {
     "puppeteer": "*",
-    "tap-dot": "*",
-    "tape": "*"
+    "mocha": "*"
   },
-  "dependencies": {}
+  "dependencies": { }
 }

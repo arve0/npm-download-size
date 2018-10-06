@@ -2,6 +2,11 @@ const http = require("http");
 const fs = require("fs");
 const { normalize, join } = require("path");
 
+const rootPath = join(__dirname, '..', 'dist');
+
+const DEBUG = process.env.DEBUG || false
+const debug = (str) => DEBUG ? console.log(str) : null;
+
 const mimeTypes = {
     'html': 'text/html',
     'jpeg': 'image/jpeg',
@@ -20,14 +25,14 @@ function sendFile(request, response) {
     if (safePath === '' || safePath === '/') {
         safePath = 'index.html';
     }
-    let filename = join(__dirname, '..', 'dist', safePath);
+    let filename = join(rootPath, safePath);
     if (!fs.existsSync(filename)) {
-        console.log('404 - ' + request.method + ': ' + request.url);
+        debug('Server: 404 - ' + request.method + ': ' + request.url);
         response.statusCode = 404;
         response.end('File not found.');
     }
     else {
-        console.log('200 - ' + request.method + ': ' + request.url);
+        debug('Server: 200 - ' + request.method + ': ' + request.url);
         let headers = {
             // @ts-ignore
             'Content-Type': mimeTypes[filename.split('.').pop()] || mimeTypes['default']
@@ -43,7 +48,7 @@ function start(port = 8888) {
             if (err) {
                 return reject(err);
             }
-            console.log(`Listening on port ${port}`);
+            debug(`Server: Listening on port ${port}`);
             resolve();
         });
     });
