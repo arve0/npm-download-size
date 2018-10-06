@@ -4,8 +4,6 @@
   "description": "plain browser testing with puppeteer and tape",
   "main": "index.js",
   "scripts": {
-    "build": "npm run build-tape && tsc",
-    "build-tape": "browserify node_modules/tape/index.js -s tape -o tape.js",
     "test": "node test.js | tap-dot"
   },
   "repository": {
@@ -19,13 +17,9 @@
   },
   "homepage": "https://github.com/arve0/simple-browser-testing#readme",
   "devDependencies": {
-    "@types/node": "*",
-    "@types/tape": "^4.2.32",
-    "browserify": "*",
     "puppeteer": "*",
-    "tap-dot": "arve0/tap-dot#with-stack-output",
-    "tape": "*",
-    "typescript": "*"
+    "tap-dot": "*",
+    "tape": "*"
   },
   "dependencies": {}
 }

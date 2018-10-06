@@ -1,5 +1,5 @@
 const { start, shutdown } = require('./server')
-const { launch, Page } = require('puppeteer')
+const { launch } = require('puppeteer')
 const it = require('tape')
 
 launch({ devtools: true }).then(async (browser) => {
@@ -16,7 +16,7 @@ launch({ devtools: true }).then(async (browser) => {
         }
     })
 
-    let mainPage = 'http://localhost:8888/client-tests.html'
+    let mainPage = 'http://localhost:8888/'
 
     await page.goto(mainPage)
 
