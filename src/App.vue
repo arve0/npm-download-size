@@ -115,7 +115,8 @@ export default {
       let uri = `https://api.npms.io/v2/search/suggestions?q=${value}`
       await fetch(uri)
         .then(r => r.json())
-        .then(r => this.suggestions = r || [])
+        .then(r => this.suggestions = r || [])
+        .then(s => s.sort(depricatedLast))
         .catch(err => this.$emit('error', err))
     },
     getPath: function (name) {
@@ -123,6 +124,19 @@ export default {
     },
     uriEncodePkgName: (pkgname) => pkgname.replace('/', '%2f')
   }
+}
+
+function depricatedLast (a, b) {
+  if (isDepricated(a) && !isDepricated(b)) {
+    return 1
+  } else if (!isDepricated(a) && isDepricated(b)) {
+    return -1
+  }
+  return b.searchScore - a.searchScore
+}
+
+function isDepricated (pkg) {
+  return pkg.flags && pkg.flags.deprecated
 }
 
 </script>

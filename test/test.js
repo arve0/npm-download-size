@@ -84,6 +84,19 @@ launch({ devtools: true }).then(async (browser) => {
         t.end()
     })
 
+    it('should sort depreciated packages last', async t => {
+        await page.goto(mainPage)
+        let input = await page.$('input')
+        await input.type('npm')
+
+        let firstSearchResult = '.v-autocomplete-list > :nth-child(1) > span'
+        await page.waitFor(firstSearchResult)
+        let first = await page.$eval(firstSearchResult, span => span.textContent)
+
+        t.equal(first, 'npm')
+        t.end()
+    })
+
     // wait for tests to end
     await onFinish()
 
