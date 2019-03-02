@@ -30,7 +30,7 @@ Click on dependencies to show their statistics. If you click on the package name
 npm install
 
 # serve with hot reload at localhost:8080
-npm run dev
+npm start
 
 # build for production with minification
 npm run build

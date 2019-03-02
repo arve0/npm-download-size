@@ -47,7 +47,7 @@ export default {
     getPkg: function () {
       this.spin()
       this._interval = setInterval(this.spin, 100)
-      let uri = `https://api.seljebu.no/download-size/${this.pkgName}`
+      let uri = `https://npm-download-size.seljebu.no/${this.pkgName}`
       fetch(uri).then(res => {
         if (res.status === 404) {
           let spec = this.pkgName.replace('%2f', '/')

@@ -1,4 +1,4 @@
-const { start, shutdown } = require('./server')
+const server = require('./server')
 const { launch } = require('puppeteer')
 const assert = require('assert');
 
@@ -7,9 +7,10 @@ let mainPage = `http://localhost:${port}/`
 let browser = null
 let page = null
 
-before(() => launch({ devtools: true }).then(async (b) => {
-    browser = b
-    await start(port)
+before(async function () {
+    this.timeout(5 * 1000)
+    await server.start(port)
+    browser = await launch({ devtools: true });
     page = (await browser.pages())[0]
 
     page.on('console', async msg => {
@@ -21,13 +22,13 @@ before(() => launch({ devtools: true }).then(async (b) => {
             console.log(msg._text)
         }
     })
-}))
+})
 
 beforeEach(async () => await page.goto(mainPage))
 
 after(() => {
     browser.close()
-    shutdown()
+    server.shutdown()
 })
 
 it('should have an input element', async () => {
